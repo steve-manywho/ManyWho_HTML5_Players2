@@ -116,6 +116,102 @@ manywho.graph.style = (function() {
 
         },
 
+        createOperatorStyle: function () {
+
+            var operatorStyle = {};
+
+            operatorStyle[mxConstants.STYLE_IMAGE_WIDTH] = '15';
+            operatorStyle[mxConstants.STYLE_IMAGE_HEIGHT] = '15';
+            operatorStyle[mxConstants.STYLE_IMAGE] = 'https://cdn.manywho.com/extensions/glyphicons/glyphicons_136_cogwheel_white.png';
+            operatorStyle[mxConstants.STYLE_FILLCOLOR] = '#AC59D6';
+            operatorStyle[mxConstants.STYLE_STROKECOLOR] = '#AC59D6';
+
+            styles['operator'] = $.extend({}, styles['base'], operatorStyle);
+
+            this.registerStyle('operator');
+
+        },
+
+        createMessageStyle: function () {
+
+            var messageStyle = {};
+
+            messageStyle[mxConstants.STYLE_IMAGE_WIDTH] = '15';
+            messageStyle[mxConstants.STYLE_IMAGE_HEIGHT] = '15';
+            messageStyle[mxConstants.STYLE_IMAGE] = 'https://cdn.manywho.com/extensions/glyphicons/glyphicons_054_clock_white.png';
+            messageStyle[mxConstants.STYLE_FILLCOLOR] = '#C58BE2';
+            messageStyle[mxConstants.STYLE_STROKECOLOR] = '#C58BE2';
+
+            styles['message'] = $.extend({}, styles['base'], messageStyle);
+
+            this.registerStyle('message');
+
+        },
+
+        createLoadStyle: function () {
+
+            var loadStyle = {};
+
+            loadStyle[mxConstants.STYLE_IMAGE_WIDTH] = '15';
+            loadStyle[mxConstants.STYLE_IMAGE_HEIGHT] = '15';
+            loadStyle[mxConstants.STYLE_IMAGE] = 'https://cdn.manywho.com/extensions/glyphicons/glyphicons_201_upload_white.png';
+            loadStyle[mxConstants.STYLE_FILLCOLOR] = '#CC0000';
+            loadStyle[mxConstants.STYLE_STROKECOLOR] = '#CC0000';
+
+            styles['load'] = $.extend({}, styles['base'], loadStyle);
+
+            this.registerStyle('load');
+
+        },
+
+        createSaveStyle: function () {
+
+            var saveStyle = {};
+
+            saveStyle[mxConstants.STYLE_IMAGE_WIDTH] = '15';
+            saveStyle[mxConstants.STYLE_IMAGE_HEIGHT] = '15';
+            saveStyle[mxConstants.STYLE_IMAGE] = 'https://cdn.manywho.com/extensions/glyphicons/glyphicons_200_download_white.png';
+            saveStyle[mxConstants.STYLE_FILLCOLOR] = '#E92727';
+            saveStyle[mxConstants.STYLE_STROKECOLOR] = '#E92727';
+
+            styles['save'] = $.extend({}, styles['base'], saveStyle);
+
+            this.registerStyle('save');
+
+        },
+
+        createDeleteStyle: function () {
+
+            var deleteStyle = {};
+
+            deleteStyle[mxConstants.STYLE_IMAGE_WIDTH] = '15';
+            deleteStyle[mxConstants.STYLE_IMAGE_HEIGHT] = '15';
+            deleteStyle[mxConstants.STYLE_IMAGE] = 'https://cdn.manywho.com/extensions/glyphicons/glyphicons_197_remove_white.png';
+            deleteStyle[mxConstants.STYLE_FILLCOLOR] = '#FF4444';
+            deleteStyle[mxConstants.STYLE_STROKECOLOR] = '#FF4444';
+
+            styles['delete'] = $.extend({}, styles['base'], deleteStyle);
+
+            this.registerStyle('delete');
+
+        },
+
+        createSwimlaneStyle: function () {
+
+            var swimlaneStyle = {};
+
+            swimlaneStyle[mxConstants.STYLE_IMAGE_WIDTH] = '15';
+            swimlaneStyle[mxConstants.STYLE_IMAGE_HEIGHT] = '15';
+            swimlaneStyle[mxConstants.STYLE_IMAGE] = 'https://cdn.manywho.com/extensions/glyphicons/glyphicons_198_ok_white.png';
+            swimlaneStyle[mxConstants.STYLE_FILLCOLOR] = '#9933CC';
+            swimlaneStyle[mxConstants.STYLE_STROKECOLOR] = '#9933CC';
+
+            styles['swimlane'] = $.extend({}, styles['base'], swimlaneStyle);
+
+            this.registerStyle('swimlane');
+
+        },
+
         registerStyle: function (name) {
 
             manywho.graph.getGraphObject().graph.getStylesheet().putCellStyle(name, styles[name]);
@@ -136,6 +232,12 @@ manywho.graph.style = (function() {
             this.createStepStyle();
             this.createPageStyle();
             this.createDecisionStyle();
+            this.createOperatorStyle();
+            this.createMessageStyle();
+            this.createLoadStyle();
+            this.createSaveStyle();
+            this.createDeleteStyle();
+            this.createSwimlaneStyle();
 
         }
 
