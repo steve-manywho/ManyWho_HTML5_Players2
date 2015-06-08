@@ -104,20 +104,6 @@ manywho.graph.events = (function () {
 
                     });
 
-                } else if (event.selectionModel.cells[0] && event.selectionModel.cells[0].style.toLowerCase() == 'decision') {
-
-                    manywho.draw.ajax.getValues().then(function (response) {
-
-                        manywho.draw.ajax.getMapElement(event.selectionModel.cells[0].id, manywho.draw.model.getFlowId(), manywho.draw.model.getEditingToken()).then(function (data) {
-
-                            manywho.model.setModal('draw_draw_draw_main', 'build_build_build_modal');
-
-                            manywho.layout.renderDecisionLayout(response, data);
-
-                        });
-
-                    });
-
                 } else if (event.selectionModel.cells[0] && event.selectionModel.cells[0].style.toLowerCase() == 'outcome') {
 
                     inputObject = {
@@ -227,15 +213,7 @@ manywho.graph.events = (function () {
 
                     if (manywho.utils.isEqual(graph.getSelectionCells()[0].style, 'outcome', true)) {
 
-                        if (graph.getSelectionCells()[0].source.style.toLowerCase() == 'decision') {
-
-                            alert('Please delete the Decision element instead of just deleting the connector');
-
-                        } else {
-
-                            manywho.graph.deleteOutcome(graph.getSelectionCells()[0])
-
-                        }
+                        manywho.graph.deleteOutcome(graph.getSelectionCells()[0])
 
                     } else {
 

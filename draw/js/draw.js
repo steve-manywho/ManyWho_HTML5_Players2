@@ -7,8 +7,14 @@ manywho.draw = ( function(manywho) {
             manywho.graph.initialize();
 
             this.registerNavClickEvent('flow');
+            this.registerNavClickEvent('page_layout');
+            this.registerNavClickEvent('variable');
+            this.registerNavClickEvent('type');
+            this.registerNavClickEvent('service');
 
             this.registerRunClickEvent();
+
+            this.registerActivateClickEvent();
 
             this.registerSaveClickEvent();
 
@@ -66,6 +72,18 @@ manywho.draw = ( function(manywho) {
                         typeElementDeveloperName: null
                     }];
 
+                if (name.toLowerCase() != 'flow') {
+
+                    inputs.push({
+                        contentType: 'ContentString',
+                        contentValue: name.toUpperCase(),
+                        developerName: 'ElementType',
+                        objectData: null,
+                        typeElementDeveloperName: null
+                    })
+
+                }
+
                 manywho.engine.initializeSystemFlow(name.toUpperCase(), 'draw_draw_draw_main', inputs, [
                     {
                         execute: manywho.draw.ajax.getFlowGraph,
@@ -85,7 +103,44 @@ manywho.draw = ( function(manywho) {
 
         registerRunClickEvent: function () {
 
-            var generate = document.getElementById('generate');
+            var generate = document.getElementById('run-flow');
+
+            generate.addEventListener('click', function(event) {
+
+                manywho.draw.ajax.getFlowVersion().then(function(data) {
+
+                    manywho.draw.ajax.getFlowSnapshot(data.id.versionId).then(function (metadata) {
+
+                        manywho.draw.ajax.convertLua(metadata).then(function (code) {
+
+                            if (code.errors) {
+
+                                alert(code.errors);
+
+                            }
+
+                            if (code.luaCode) {
+
+                                manywho.draw.model.setLuaCode(code);
+
+                                manywho.model.setModal('draw_draw_draw_main', 'build_build_build_modal');
+
+                                manywho.draw.renderLuaCode();
+
+                            }
+
+                        })
+
+                    });
+
+                });
+
+            });
+        },
+
+        registerActivateClickEvent: function () {
+
+            var generate = document.getElementById('activate-flow');
 
             generate.addEventListener('click', function(event) {
 
@@ -136,16 +191,6 @@ manywho.draw = ( function(manywho) {
                 }
 
             })
-
-        },
-
-        renderLuaCode: function () {
-
-            var container = document.getElementById('draw-modal');
-
-            container.classList.remove('hidden');
-
-            React.render(React.createElement(manywho.lua), container);
 
         },
 

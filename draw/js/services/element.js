@@ -12,55 +12,31 @@ manywho.graph.element = (function() {
 
             mxUtils.makeDraggable(document.getElementById(name), manywho.graph.getGraphObject().graph, function(graph, event, cell, x, y) {
 
-                if (event.srcElement.id.toLowerCase() == 'input') {
+                var inputObject = {
+                    Id: '',
+                    AuthenticationToken: manywho.state.getAuthenticationToken('draw_draw_draw_main'),
+                    EditingToken: manywho.draw.model.getEditingToken(),
+                    FlowId: manywho.draw.model.getFlowId(),
+                    ElementType: event.srcElement.id,
+                    X: x,
+                    Y: y,
+                    Command: "create",
+                    GroupElementId: ""
 
-                    manywho.model.setModal('draw_draw_draw_main', 'build_build_build_modal');
+                };
 
-                    manywho.draw.model.setMapElementCoordinates(x, y);
-
-                    manywho.layout.render();
-
-                } else if (event.srcElement.id.toLowerCase() == 'decision') {
-
-                    manywho.draw.ajax.getValues().then(function (response) {
-
-                        manywho.model.setModal('draw_draw_draw_main', 'build_build_build_modal');
-
-                        manywho.draw.model.setMapElementCoordinates(x, y);
-
-                        manywho.layout.renderDecisionLayout(response);
-
-                    });
-
-                } else {
-
-                    var inputObject = {
-                        Id: '',
-                        AuthenticationToken: manywho.state.getAuthenticationToken('draw_draw_draw_main'),
-                        EditingToken: manywho.draw.model.getEditingToken(),
-                        FlowId: manywho.draw.model.getFlowId(),
-                        ElementType: event.srcElement.id,
-                        X: x,
-                        Y: y,
-                        Command: "create",
-                        GroupElementId: ""
-
-                    };
-
-                    manywho.engine.initializeSystemFlow(event.srcElement.id, 'draw_draw_draw_main', manywho.json.generateFlowInputs(inputObject), [
-                        {
-                            execute: manywho.draw.hideModal,
-                            type: 'done',
-                            args: ['draw_draw_draw_main']
-                        },
-                        {
-                            execute: manywho.draw.ajax.getFlowGraph,
-                            type: 'done',
-                            args: []
-                        }
-                    ]);
-
-                }
+                manywho.engine.initializeSystemFlow(event.srcElement.id, 'draw_draw_draw_main', manywho.json.generateFlowInputs(inputObject), [
+                    {
+                        execute: manywho.draw.hideModal,
+                        type: 'done',
+                        args: ['draw_draw_draw_main']
+                    },
+                    {
+                        execute: manywho.draw.ajax.getFlowGraph,
+                        type: 'done',
+                        args: []
+                    }
+                ]);
 
             }, dragImage);
 
@@ -68,8 +44,14 @@ manywho.graph.element = (function() {
 
         initialize: function () {
 
+            this.addDraggableElements('step');
             this.addDraggableElements('input');
             this.addDraggableElements('decision');
+            this.addDraggableElements('operator');
+            this.addDraggableElements('message');
+            this.addDraggableElements('load');
+            this.addDraggableElements('save');
+            this.addDraggableElements('swimlane');
 
         }
 
