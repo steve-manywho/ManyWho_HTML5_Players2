@@ -55,7 +55,7 @@ permissions and limitations under the License.
 
     function updateData(collection, item, key) {
 
-        log.info("Updating item: " + item.id);
+        manywhoLogging.info("Updating item: " + item.id);
 
         var data = manywho.utils.get(collection, item.id, key);
 
@@ -133,7 +133,7 @@ permissions and limitations under the License.
         return navigationItems;
 
     }
-    
+
     manywho.model = {
 
         parseEngineResponse: function (engineInvokeResponse, flowKey) {
@@ -145,6 +145,7 @@ permissions and limitations under the License.
             flowModel[flowKey].notifications = [];
             flowModel[flowKey].stateValues = [];
             flowModel[flowKey].preCommitStateValues = [];
+            flowModel[flowKey].parentStateId = engineInvokeResponse.parentStateId;
 
             if (engineInvokeResponse && engineInvokeResponse.mapElementInvokeResponses) {
 
@@ -156,40 +157,50 @@ permissions and limitations under the License.
 
                     flowModel[flowKey].label = engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.label;
 
-                    var flattenedContainers = flattenContainers(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerResponses, null, []);
-                    flattenedContainers.forEach(function (item) {
+                    if (engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerResponses != null) {
 
-                        flowModel[flowKey].containers[item.id] = item;
+                        var flattenedContainers = flattenContainers(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerResponses, null, []);
+                        flattenedContainers.forEach(function (item) {
 
-                        if (manywho.utils.contains(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerDataResponses, item.id, 'pageContainerId')) {
-                            flowModel[flowKey].containers[item.id] = updateData(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerDataResponses, item, 'pageContainerId');
+                            flowModel[flowKey].containers[item.id] = item;
 
-                        }
+                            if (manywho.utils.contains(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerDataResponses, item.id, 'pageContainerId')) {
+                                flowModel[flowKey].containers[item.id] = updateData(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageContainerDataResponses, item, 'pageContainerId');
 
-                    }, this);
+                            }
+
+                        }, this);
+
+                    }
 
                     var decodeTextArea = document.createElement('textarea');
 
-                    engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentResponses.forEach(function (item) {
+                    if (engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentResponses != null) {
 
-                        flowModel[flowKey].components[item.id] = item;
+                        engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentResponses.forEach(function (item) {
 
-                        if (!flowModel[flowKey].containers[item.pageContainerId].childCount) {
+                            item.attributes = item.attributes || {};
 
-                            flowModel[flowKey].containers[item.pageContainerId].childCount = 0;
+                            flowModel[flowKey].components[item.id] = item;
 
-                        }
+                            if (!flowModel[flowKey].containers[item.pageContainerId].childCount) {
 
-                        flowModel[flowKey].containers[item.pageContainerId].childCount++;
+                                flowModel[flowKey].containers[item.pageContainerId].childCount = 0;
 
-                        if (manywho.utils.contains(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentDataResponses, item.id, 'pageComponentId')) {
+                            }
 
-                            flowModel[flowKey].components[item.id] = updateData(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentDataResponses, item, 'pageComponentId');
-                            flowModel[flowKey].components[item.id] = decodeEntities(flowModel[flowKey].components[item.id], decodeTextArea);
+                            flowModel[flowKey].containers[item.pageContainerId].childCount++;
 
-                        }
+                            if (manywho.utils.contains(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentDataResponses, item.id, 'pageComponentId')) {
 
-                    }, this);
+                                flowModel[flowKey].components[item.id] = updateData(engineInvokeResponse.mapElementInvokeResponses[0].pageResponse.pageComponentDataResponses, item, 'pageComponentId');
+                                flowModel[flowKey].components[item.id] = decodeEntities(flowModel[flowKey].components[item.id], decodeTextArea);
+
+                            }
+
+                        }, this);
+
+                    }
 
                 }
 
@@ -242,6 +253,13 @@ permissions and limitations under the License.
 
                 }
 
+                if (engineInvokeResponse.parentStateId) {
+
+                    var navigationComponents = manywho.settings.global("navigation.components", flowKey, []);
+                    navigationComponents.push(React.createElement(manywho.component.getByName('returnToParent'), { flowKey: flowKey, parentStateId: engineInvokeResponse.parentStateId }));
+
+                }
+
                 flowModel[flowKey].preCommitStateValues = engineInvokeResponse.preCommitStateValues;
                 flowModel[flowKey].stateValues = engineInvokeResponse.stateValues;
 
@@ -257,7 +275,7 @@ permissions and limitations under the License.
         },
 
         parseEngineSyncResponse: function(response, flowKey) {
-            
+
             if (response.mapElementInvokeResponses) {
 
                 response.mapElementInvokeResponses[0].pageResponse.pageContainerDataResponses.forEach(function (item) {
@@ -415,7 +433,7 @@ permissions and limitations under the License.
             }
 
         },
-                
+
         getDefaultNavigationId: function(flowKey) {
 
             if (flowModel[flowKey].navigation) {
@@ -449,7 +467,7 @@ permissions and limitations under the License.
             }
 
         },
-        
+
         getInvokeType: function(flowKey) {
 
             return flowModel[flowKey].invokeType;
@@ -461,14 +479,14 @@ permissions and limitations under the License.
             return flowModel[flowKey].waitMessage;
 
         },
-        
+
         setComponentInputResponseRequest: function (componentId, contentValue, objectData) {
 
             this.componentInputResponseRequests[componentId].contentValue = contentValue;
             this.componentInputResponseRequests[componentId].objectData = objectData;
 
         },
-        
+
         setModal: function(flowKey, modalKey) {
 
             flowModel[flowKey].modal = modalKey;
@@ -588,6 +606,19 @@ permissions and limitations under the License.
                 return objectData;
 
             }
+
+        },
+
+        getParentStateId: function(flowKey) {
+
+            return flowModel[flowKey].parentStateId;
+
+        },
+
+        deleteFlowModel(flowKey) {
+
+            flowModel[flowKey] = null;
+            delete flowModel[flowKey];
 
         }
 

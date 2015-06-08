@@ -93,7 +93,7 @@ gulp.task('clean-dist', function (cb) {
 
 gulp.task('less-dist', function () {
 
-    return gulp.src(['css/*.less', '!css/mw-bootstrap.less', 'css/lib/bootstrap-chosen.css', 'css/lib/datepicker.css'])
+    return gulp.src(['css/*.less', '!css/mw-bootstrap.less', 'css/lib/bootstrap-chosen.css', 'css/lib/bootstrap-datetimepicker.css'])
                 .pipe(concat('compiled.less'))
                 .pipe(less())
                 .pipe(minifyCSS())
@@ -168,8 +168,6 @@ gulp.task('js-loader-dist', function () {
 gulp.task('html-dist', function () {
 
     return gulp.src('default.html')
-            .pipe(replace('{{cdnurl}}', process.env.BAMBOO_CDNURL))
-            .pipe(replace('{{baseurl}}', process.env.BAMBOO_BASEURL))
             .pipe(gulp.dest('./dist/'));
 
 });
@@ -266,6 +264,8 @@ gulp.task('deploy-player', function () {
     var headers = {};
 
     return gulp.src(['dist/default.html'])
+                .pipe(replace('{{cdnurl}}', process.env.BAMBOO_CDNURL))
+                .pipe(replace('{{baseurl}}', process.env.BAMBOO_BASEURL))
                 .pipe(rename(tenantId + '.' + argv.player))
                 .pipe(publisher.publish(headers))
                 .pipe(awspublish.reporter())

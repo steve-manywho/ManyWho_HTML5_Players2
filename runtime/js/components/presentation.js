@@ -13,9 +13,9 @@ permissions and limitations under the License.
 
     var presentation = React.createClass({
 
-        componentDidMount: function() {
+        replaceContent: function() {
 
-            log.info('Rendering Presentation: ' + this.props.id);
+            manywhoLogging.info('Rendering Presentation: ' + this.props.id);
 
             var html = manywho.model.getComponent(this.props.id, this.props.flowKey).content
                 .replace(/&quot;/g, '\"')
@@ -35,10 +35,13 @@ permissions and limitations under the License.
                     imgs[i].className += ' img-responsive';
 
                 }
-                
+
             }
-            
+
         },
+
+        componentDidUpdate: function() { this.replaceContent() },
+        componentDidMount: function() { this.replaceContent() },
 
         render: function () {
 
@@ -51,5 +54,5 @@ permissions and limitations under the License.
     });
 
     manywho.component.register("presentation", presentation);
-    
+
 }(manywho));

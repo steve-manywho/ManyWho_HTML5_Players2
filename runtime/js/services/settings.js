@@ -12,6 +12,15 @@ permissions and limitations under the License.
 manywho.settings = (function (manywho, $) {
 
     var globals = {
+        localization: {
+            initializing: 'Initializing',
+            executing: 'Executing',
+            loading: 'Loading',
+            navigating: 'Navigating',
+            joining: 'Joining',
+            sending: 'Sending',
+            returnToParent: 'Return To Parent'
+        },
         paging: {
             table: 10,
             select: 250
@@ -54,6 +63,7 @@ manywho.settings = (function (manywho, $) {
         sync: {},
         navigation: {},
         join: {},
+        flowOut: {},
         login: {},
         log: {},
         objectData: {},
@@ -63,7 +73,7 @@ manywho.settings = (function (manywho, $) {
         social: {},
         ping: {}
     };
-    
+
     function toLowerCaseKeys(obj) {
 
         for (var prop in obj) {
@@ -123,7 +133,7 @@ manywho.settings = (function (manywho, $) {
                     return defaultValue;
 
                 }
-                
+
             }
 
             return globalValue;
@@ -148,9 +158,27 @@ manywho.settings = (function (manywho, $) {
 
         },
 
-        isDebugEnabled: function (flowKey) {
+        isDebugEnabled: function (flowKey, value) {
 
-            return manywho.utils.isEqual(this.flow('mode', flowKey), 'Debug', true);
+            if (typeof value == 'undefined') {
+
+                return manywho.utils.isEqual(this.flow('mode', flowKey), 'Debug', true) || manywho.utils.isEqual(this.flow('mode', flowKey), 'Debug_StepThrough', true);
+
+            }
+            else {
+
+                if (value) {
+
+                    flows[flowKey].mode = 'Debug';
+
+                }
+                else {
+
+                    flows[flowKey].mode = '';
+
+                }
+
+            }
 
         }
 

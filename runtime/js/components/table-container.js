@@ -145,7 +145,18 @@ permissions and limitations under the License.
             var model = manywho.model.getComponent(this.props.id, this.props.flowKey);
             var state = manywho.state.getComponent(this.props.id, this.props.flowKey);
 
-            manywho.engine.objectDataRequest(this.props.id, model.objectDataRequest, this.props.flowKey, manywho.settings.global('paging.table'), state.search, null, null, state.page);
+            var request = model.objectDataRequest || model.fileDataRequest;
+
+            if (request) {
+
+                manywho.engine.objectDataRequest(this.props.id, request, this.props.flowKey, manywho.settings.global('paging.table'), state.search, null, null, state.page);
+
+            }
+            else {
+
+                manywhoLogging.error('ObjectDataRequest and FileDataRequest are null for table: ' + model.developerName + '. A request object is required to search');
+
+            }
 
         },
 
@@ -280,7 +291,7 @@ permissions and limitations under the License.
         
         render: function () {
 
-            log.info('Rendering Table: ' + this.props.id);
+            manywhoLogging.info('Rendering Table: ' + this.props.id);
 
             var isValid = true;
 
@@ -390,7 +401,7 @@ permissions and limitations under the License.
             }, null);
 
             return React.DOM.div({ className: classNames }, [
-                (manywho.utils.isNullOrWhitespace(model.label)) ? null : React.DOM.h3({ className: 'container-label' }, model.label),
+                (manywho.utils.isNullOrWhitespace(model.label)) ? null : React.DOM.label({}, model.label),
                 React.DOM.div({ className: this.state.isVisible ? '' : ' hidden' }, [
                     (model.fileDataRequest) ? fileUpload : null,    
                     renderHeader(headerOutcomes, this.props.flowKey, model.isSearchable, this.onSearchChanged, this.onSearchEnter, this.search),

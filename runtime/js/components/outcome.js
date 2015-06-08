@@ -49,6 +49,7 @@ permissions and limitations under the License.
         onClick: function(e) {
 
             var model = manywho.model.getOutcome(this.props.id, this.props.flowKey);
+            var self = this;
 
             if (this.props.onClick) {
 
@@ -57,18 +58,26 @@ permissions and limitations under the License.
             }
             else {
 
-                manywho.engine.move(model, this.props.flowKey);
+                manywho.engine.move(model, this.props.flowKey).then(function() {
 
-            }            
+                    if (model.isOut) {
+
+                        manywho.engine.flowOut(model, self.props.flowKey);
+
+                    }
+
+                });
+
+            }
 
         },
 
         render: function () {
 
-            log.info('Rendering Outcome: ' + this.props.id);
+            manywhoLogging.info('Rendering Outcome: ' + this.props.id);
 
             var model = manywho.model.getOutcome(this.props.id, this.props.flowKey);
-            
+
             var classes = [
                 'outcome btn',
                 getButtonType(model.pageActionBindingType),

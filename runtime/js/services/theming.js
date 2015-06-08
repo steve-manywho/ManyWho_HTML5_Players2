@@ -13,36 +13,47 @@ manywho.theming = (function (manywho, $) {
 
     var themes = ['cerulean', 'cosmo', 'cyborg', 'darkly', 'flatly', 'journal', 'lumen', 'paper', 'readable', 'sandstone', 'simplex', 'slate', 'spacelab', 'superhero', 'united', 'yeti'];
 
+    function loadTheme(url) {
+
+        var link = document.getElementById('theme');
+        var img = document.createElement('img');
+
+        link.setAttribute('href', url);
+
+        img.onerror = function () {
+
+            manywhoLogging.info('Finished loading theme: ' + url);
+
+        };
+        img.src = url;
+
+    }
+
     return {
-        
+
         apply: function (name) {
 
             if (themes != null && name && themes.indexOf(name) != -1) {
-                     
-                log.info("Switching theme to: " + name);
-                // Show loading indicator here
+
+                manywhoLogging.info("Switching theme to: " + name);
 
                 var url = manywho.cdnUrl + manywho.settings.theme('url') + '/mw-' + name + '.css';
-                var link = document.getElementById('theme');
-                var img = document.createElement('img');
-
-                link.setAttribute('href', url);
-
-                img.onerror = function () {
-
-                    log.info('Finished loading theme: ' + name);
-                    // Hide loading indicator here
-
-                }
-                img.src = url;
+                loadTheme(url);
 
             }
             else {
 
-                log.error(name + ' theme cannot be found');
+                manywhoLogging.error(name + ' theme cannot be found');
 
             }
             
+        },
+
+        custom: function(url) {
+
+            manywhoLogging.info('Switching to custom theme: ' + url);
+            loadTheme(url);
+
         }
 
     }

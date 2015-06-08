@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" class="manywho">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="css/themes/mw-paper.css" id="theme" />
 
     <link rel="stylesheet" href="css/lib/bootstrap-chosen.css" />
-    <link rel="stylesheet" href="css/lib/datepicker.css" />
+    <link rel="stylesheet" href="css/lib/bootstrap-datetimepicker.css" />
     <link rel="stylesheet" href="css/wait.css" />
     <link rel="stylesheet" href="css/containers.css" />
     <link rel="stylesheet" href="css/select.css" />
@@ -42,10 +42,14 @@
     <script src="js/vendor/react.min.js"></script>
     <script src="js/vendor/socket.io-1.3.2.js"></script>
     <script src="js/vendor/chosen.jquery.min.js"></script>
+    <script src="js/vendor/moment-with-locales.min.js"></script>
     <script src="js/vendor/loglevel.min.js"></script>
+    <script>
+        var manywhoLogging = log.noConflict();
+    </script>
 
     <script>
-        log.enableAll();
+        manywhoLogging.enableAll();
 
         var manywho = {
             cdnUrl: '',
@@ -80,7 +84,8 @@
                     annotations: null,
                     navigation: {
                         isFixed: true
-                    }
+                    },
+                    callbacks: []
                 };
 
                 var tenantId = queryParameters['tenant-id'];
@@ -112,7 +117,7 @@
     </script>
 
     <script src="js/lib/react-chosen.js"></script>
-    <script src="js/lib/datepicker.js"></script>
+    <script src="js/lib/datetimepicker.js"></script>
     <script src="js/lib/jquery.plugins.js"></script>
 
     <script src="js/services/ajax.js"></script>
@@ -156,6 +161,7 @@
     <script src="js/components/status.js"></script>
     <script src="js/components/voting.js"></script>
     <script src="js/components/image.js"></script>
+    <script src="js/components/returnToParent.js"></script>
 
     <script src="https://flow.manywho.com/js/constants"></script>
 
