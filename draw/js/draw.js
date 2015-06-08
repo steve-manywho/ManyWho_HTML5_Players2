@@ -148,25 +148,7 @@ manywho.draw = ( function(manywho) {
 
                     manywho.draw.ajax.getFlowSnapshot(data.id.versionId).then(function (metadata) {
 
-                        manywho.draw.ajax.convertLua(metadata).then(function (code) {
 
-                            if (code.errors) {
-
-                                alert(code.errors);
-
-                            }
-
-                            if (code.luaCode) {
-
-                                manywho.draw.model.setLuaCode(code);
-
-                                manywho.model.setModal('draw_draw_draw_main', 'build_build_build_modal');
-
-                                manywho.draw.renderLuaCode();
-
-                            }
-
-                        })
 
                     });
 
