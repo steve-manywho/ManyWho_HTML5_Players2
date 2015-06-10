@@ -447,7 +447,7 @@ manywho.engine = (function (manywho) {
 
             if (!tenantId && (!stateId || (!flowId && !flowVersionId))) {
 
-                manywhoLogging.error('tenantId & stateId, or tenatntId & flowId & flowVersionId must be specified');
+                manywho.log.error('tenantId & stateId, or tenatntId & flowId & flowVersionId must be specified');
                 return;
 
             }
@@ -651,6 +651,7 @@ manywho.engine = (function (manywho) {
                 manywho.state.getState(flowKey),
                 'SYNC',
                 null,
+                null,
                 manywho.state.getPageComponentInputResponseRequests(flowKey),
                 null,
                 manywho.settings.flow('annotations', flowKey),
@@ -716,7 +717,7 @@ manywho.engine = (function (manywho) {
 
             }
 
-            if (options.callbacks != null && options.callbacks.length > 0) {
+            if (options && options.callbacks != null && options.callbacks.length > 0) {
 
                 options.callbacks.forEach(function (callback) {
                     manywho.callbacks.register(flowKey, callback);
