@@ -4,7 +4,11 @@ manywho.draw = ( function(manywho) {
 
         initialize: function ()  {
 
+            var drawKey = 'draw_draw_draw_main';
+
             manywho.graph.initialize();
+
+            manywho.model.initializeModel(drawKey);
 
             this.registerNavClickEvent('flow');
             this.registerNavClickEvent('page_layout');
@@ -17,8 +21,6 @@ manywho.draw = ( function(manywho) {
             this.registerActivateClickEvent();
 
             this.registerSaveClickEvent();
-
-            var drawKey = 'draw_draw_draw_main';
 
             var inputObject = {
                 LoginUrl: 'https://flow.manywho.com/plugins/manywho/api/draw/1/authentication',

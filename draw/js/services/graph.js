@@ -31,6 +31,18 @@ manywho.graph = (function() {
 
         };
 
+        graph.isCellsDisconnectable = function (cell) {
+
+            if (cell && cell.isEdge()) {
+
+                return false;
+
+            }
+
+            return true;
+
+        };
+
 
         graph.convertValueToString = function (cell) {
 

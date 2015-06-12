@@ -50,9 +50,19 @@ permissions and limitations under the License.
 
             var loading = manywho.state.getLoading('modal', drawKey);
 
+            if (!loading) {
+
+                loading = manywho.state.getLoading('modal', this.props.flowKey);
+
+            }
+
             return React.DOM.div({ className: 'modal-container', id: this.props.flowKey}, [
                 React.DOM.div({ className: 'modal-backdrop in full-height' }, null),
                 modal,
+                React.createElement(manywho.component.getByName('debug'), { flowKey: this.props.flowKey }),
+                React.createElement(manywho.component.getByName('notifications'), { flowKey: this.props.flowKey, position: 'left' }),
+                React.createElement(manywho.component.getByName('notifications'), { flowKey: this.props.flowKey, position: 'center' }),
+                React.createElement(manywho.component.getByName('notifications'), { flowKey: this.props.flowKey, position: 'right' }),
                 React.createElement(manywho.component.getByName('wait'), loading, null)
             ]);
 
